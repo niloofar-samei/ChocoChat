@@ -3,10 +3,16 @@ import {io} from "socket.io-client";
 
 const socket = io("http://localhost:4000");
 
+interface ChatMessage {
+  username: string;
+  text: string;
+  timestamp: string;
+}
+
 function App() {
   const [username, setUsername] = useState("");
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<{username: string; text: string}[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const usernameSet = useRef(false);
 
   // Prompt for username once
@@ -54,7 +60,7 @@ function App() {
       <div>
         {messages.map((m, i) => (
           <p key={i}>
-            <b>{m.username}:</b> {m.text}
+            <b>{m.username}:</b> [{m.timestamp}]: {m.text}
           </p>
         ))}
       </div>

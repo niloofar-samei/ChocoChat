@@ -6,6 +6,7 @@ import {Server} from "socket.io";
 interface ChatMessage {
   username: string;
   text: string;
+  timestamp: string;
 }
 
 const app = express();
@@ -21,8 +22,13 @@ app.use(express.json());
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
-  socket.on("chat message", (msg: ChatMessage) => {
-    io.emit("chat message", msg);
+  socket.on("chat message", (msg: Omit<ChatMessage, "timestamp">) => {
+    const messageWithTime: ChatMessage = {
+      ...msg,
+      timestamp: new Date().toLocaleTimeString(),
+    };
+    
+    io.emit("chat message", messageWithTime);
   });
 
   socket.on("disconnect", () => {
