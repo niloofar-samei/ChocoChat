@@ -1,19 +1,44 @@
 import { useEffect, useState } from "react";
+import {io} from "socket.io-client";
+
+const socket = io("http://localhost:4000");
 
 function App() {
-  const [message, setMessage] = useState("Loading...");
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState<string[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:4000/api/message")
-      .then((res) => res.json())
-      .then((data) => setMessage(data.message))
-      .catch((err) => setMessage("Error: " + err.message));
+    socket.on("chat message", (msg) => {
+      setMessages((prev) => [...prev, msg]);
+    });
+
+    return () => {
+      socket.off("chat message");
+    };
   }, []);
 
+  const sendMessage = () => {
+    if (message.trim()) {
+      socket.emit("chat message", message);
+      setMessage("");
+    }
+  };
+
+
   return (
-    <div style={{ fontFamily: "sans-serif", textAlign: "center", marginTop: "3rem" }}>
-      <h1>Frontend + Backend Connection Test</h1>
-      <p>{message}</p>
+    <div style={{ textAlign: "center", marginTop: "3rem" }}>
+      <h1>Chat App</h1>
+      <div>
+        {messages.map((m, i) => (
+          <p key={i}>{m}</p>
+        ))}
+      </div>
+      <input
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        placeholder="Type a message..."
+      />
+      <button onClick={sendMessage}>Send</button>
     </div>
   );
 }
