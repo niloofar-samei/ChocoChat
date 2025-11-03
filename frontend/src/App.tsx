@@ -25,7 +25,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const handleMessage = (msg: {username: string; text: string}) => {
+    const handleMessage = (msg: ChatMessage) => {
       setMessages((prev) => [...prev, msg]);
     };
 
