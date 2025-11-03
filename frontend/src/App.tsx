@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {io} from "socket.io-client";
 
 const socket = io("http://localhost:4000");
@@ -7,11 +7,15 @@ function App() {
   const [username, setUsername] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<{username: string; text: string}[]>([]);
+  const usernameSet = useRef(false);
 
   // Prompt for username once
   useEffect(() => {
-    const username = prompt("Enter your username") || "Anonymous";
-    setUsername(username);
+    if (!usernameSet.current) {
+      const name = prompt("Enter your username") || "Anonymous";
+      setUsername(name);
+      usernameSet.current = true;
+    }
   }, []);
 
   useEffect(() => {
