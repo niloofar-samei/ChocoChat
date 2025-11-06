@@ -24,7 +24,7 @@
         # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
         packages.default = pkgs.hello;
         devShells.default = pkgs.mkShell {
-          nativeBuildInputs = ( with pkgs; [
+          nativeBuildInputs = (with pkgs; [
             nodejs_22
             yarn
             typescript
@@ -42,4 +42,3 @@
       };
     };
 }
-

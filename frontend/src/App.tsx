@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import {io} from "socket.io-client";
+import { io } from "socket.io-client";
 
 const socket = io("http://localhost:4000");
 
@@ -39,13 +39,12 @@ function App() {
 
   const sendMessage = () => {
     if (message.trim()) {
-      socket.emit("chat message", {username: username, text: message});
+      socket.emit("chat message", { username: username, text: message });
       setMessage("");
     }
   };
 
 
- 
   return (
     <div style={styles.container}>
       <h1 style={styles.header}>Choco Chat</h1>
