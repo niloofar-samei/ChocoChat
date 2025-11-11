@@ -102,7 +102,7 @@ function App() {
         <span className="ml-1 animate-pulse text-terminal-accent">▮</span>
       </div>
 
-      <div className="bg-lime-500 mt-4">{currentTime.toLocaleString()}</div>
+      <div className="bg-lime-500 mt-4 pl-2">{currentTime.toLocaleString()}</div>
 
     </div>
   );
