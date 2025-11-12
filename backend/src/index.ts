@@ -23,8 +23,13 @@ const io = new Server(server, {
 app.use(cors());
 app.use(express.json());
 
+let onlineUsers = 0;
+
 io.on("connection", (socket) => {
+  onlineUsers++;
   console.log("User connected:", socket.id);
+
+  io.emit("online users", onlineUsers);
 
 socket.on("chat message", async (msg: Omit<ChatMessage, "timestamp">) => {
   const timestamp = new Date().toLocaleTimeString();
@@ -49,7 +54,9 @@ socket.on("chat message", async (msg: Omit<ChatMessage, "timestamp">) => {
 
 
   socket.on("disconnect", () => {
+    onlineUsers--;
     console.log("User disconnected:", socket.id);
+    io.emit("online users", onlineUsers);
   });
 });
 

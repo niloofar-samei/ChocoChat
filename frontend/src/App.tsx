@@ -17,6 +17,17 @@ function App() {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [input, setInput] = useState("");
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [onlineUsers, setOnlineUsers] = useState(0);
+
+  useEffect(() => {
+    socket.on("online users", (count: number) => {
+      setOnlineUsers(count);
+    });
+
+    return () => {
+      socket.off("online users");
+    };
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -102,7 +113,9 @@ function App() {
         <span className="ml-1 animate-pulse text-terminal-accent">▮</span>
       </div>
 
-      <div className="bg-lime-500 mt-4 pl-2">{currentTime.toLocaleString()}</div>
+      <div className="bg-lime-500 mt-4 pl-2">{
+        currentTime.toLocaleString()} ~ Online users: {onlineUsers}
+      </div>
 
     </div>
   );
